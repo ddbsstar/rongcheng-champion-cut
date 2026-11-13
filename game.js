@@ -54,6 +54,7 @@ let dalianRevealed = 0;
 let phase = "ready";
 let rotation = 0;
 let timer;
+let friendAssist = null;
 const hand = '<span class="guide-hand" aria-hidden="true">☝️</span>';
 const burst = '<span class="burst" aria-hidden="true"></span>';
 const materials = [prizes[3], prizes[1], prizes[2], prizes[4]];
@@ -320,22 +321,61 @@ function showDalianAssist() {
     return;
   }
   const match = dalianMatches[roundIndex];
+  const unlocked = canOpenDalian();
+  const waiting = friendAssist?.round === roundIndex && !unlocked;
+  const directMatch = isDirectMatch();
   showDialog(
     burst + '<p class="hype-kicker">冠军助力红包</p><h2 id="modal-title">快！助力大连输球！</h2>'
     + '<p>大连英博 vs ' + match.team + '。大连只要少拿分，蓉城就能夺冠。</p>'
-    + '<div class="big-packet"><button id="open-dalian" data-focus class="packet-open" type="button" aria-label="拆掉分红包，揭晓大连赛果">开' + hand + '</button></div>'
-    + '<p class="envelope-note">点「开」，看看这一刀有没有砍掉大连的分</p>'
-    + '<button id="invite-dalian" class="secondary" type="button">喊好友来助力</button>',
+    + '<div class="big-packet"><button id="open-dalian" class="packet-open" type="button" '
+    + (unlocked ? 'data-focus aria-label="拆掉分红包，揭晓大连赛果">开' + hand : 'disabled aria-label="红包待解锁">锁')
+    + '</button></div>'
+    + '<p class="envelope-note">' + (directMatch ? '这轮是成都和大连直接交锋，可以直接拆。'
+      : unlocked ? '好友助力已到账，点「开」揭晓比分。'
+        : waiting ? '口令已复制，切到聊天或其他页面，再回来解锁。'
+          : '先复制口令求助，离开页面再回来解锁红包。') + '</p>'
+    + (unlocked ? '' : resultButton("invite-dalian", "复制口令，求助" + match.team)),
     "envelope hype",
   );
   byId("open-dalian").addEventListener("click", () => {
+    if (!canOpenDalian()) return;
     dalianRevealed = roundIndex + 1;
     finishRound();
     render();
     showDalianResult(roundIndex, true);
   });
-  byId("invite-dalian").addEventListener("click", () => showInvite(true));
+  byId("invite-dalian")?.addEventListener("click", () => showInvite(true));
 }
+
+function isDirectMatch() {
+  return dalianMatches[roundIndex].crest === "chengdu";
+}
+
+function canOpenDalian() {
+  return isDirectMatch() || (friendAssist?.round === roundIndex && friendAssist.unlocked);
+}
+
+function showAssistSuccess() {
+  friendAssist.notified = true;
+  showDialog(
+    burst + '<p class="hype-kicker">掉分红包已解锁</p>'
+    + '<h2 id="modal-title">恭喜！您的好友助力成功！</h2>'
+    + '<p>' + dalianMatches[roundIndex].team + '收到助力，快去拆红包揭晓比分！</p>'
+    + resultButton("claim-assist", "去拆掉分红包"),
+    "hype campaign loot-campaign",
+  );
+  byId("claim-assist").addEventListener("click", showDalianAssist);
+}
+
+document.addEventListener("visibilitychange", () => {
+  if (friendAssist?.round !== roundIndex || friendAssist.unlocked) return;
+  if (document.hidden) {
+    friendAssist.left = true;
+  } else if (friendAssist.left) {
+    friendAssist.unlocked = true;
+    if (phase !== "spinning") showAssistSuccess();
+  }
+});
 
 function showDalianResult(index, fresh) {
   const match = dalianMatches[index];
@@ -405,13 +445,18 @@ function startSpin() {
   timer = window.setTimeout(() => {
     phase = "packet";
     render();
-    showPacket();
+    if (friendAssist?.round === roundIndex && friendAssist.unlocked && !friendAssist.notified) {
+      showAssistSuccess();
+    } else {
+      showPacket();
+    }
   }, reduceMotion.matches ? 0 : 1350);
 }
 
 function nextRound() {
   if (phase !== "result" || dalianRevealed <= roundIndex) return;
   roundIndex += 1;
+  friendAssist = null;
   phase = "ready";
   render();
   showWheel();
@@ -420,6 +465,7 @@ function nextRound() {
 function restart() {
   window.clearTimeout(timer);
   roundIndex = 0;
+  friendAssist = null;
   revealed = 0;
   dalianRevealed = 0;
   phase = "ready";
@@ -434,10 +480,13 @@ function restart() {
 
 function showInvite(forDalian = false, returnToWheel = false) {
   const complete = phase === "complete";
-  const round = matches[roundIndex].round;
-  const message = forDalian ? "第 " + round + " 轮，快来助力大连输球，帮蓉城砍冠军！"
-    : complete ? "四轮砍完还差 1 分，来玩蓉城夺冠砍一刀！"
-      : "第 " + round + " 轮，成都蓉城还差 1 分夺冠，快来帮砍一刀！";
+  const invitedRound = roundIndex;
+  const round = matches[invitedRound].round;
+  const opponent = dalianMatches[invitedRound].team;
+  const needsAssist = !complete && !isDirectMatch() && dalianRevealed <= invitedRound && !canOpenDalian();
+  const message = complete ? "四轮砍完还差 1 分，来玩蓉城夺冠砍一刀！"
+    : isDirectMatch() ? "第 " + round + " 轮，成都蓉城和大连英博直接交锋，来看看这一刀！"
+      : "第 " + round + " 轮，求助" + opponent + "帮忙拦住大连英博！快来助力蓉城砍冠军！";
   showDialog(
     '<h2 id="modal-title">' + (complete ? "分享夺冠挑战" : "邀请好友助力") + '</h2>'
     + '<p class="share-copy">' + message + '</p>'
@@ -446,14 +495,25 @@ function showInvite(forDalian = false, returnToWheel = false) {
     + '<textarea id="share-manual" class="share-manual" aria-label="助力口令" readonly hidden></textarea>'
     + '<button class="secondary" id="return-game" type="button">返回挑战</button>',
   );
+  const status = byId("share-status");
+  const manual = byId("share-manual");
+  function onCopied() {
+    if (!status.isConnected) return;
+    if (needsAssist && roundIndex === invitedRound && dalianRevealed <= invitedRound && !canOpenDalian()) {
+      friendAssist ??= { round: invitedRound, left: false, unlocked: false, notified: false };
+      if (document.hidden) friendAssist.left = true;
+      status.textContent = "口令已复制。切到聊天或其他页面，再回来解锁红包。";
+    } else {
+      status.textContent = "口令已复制，可以粘贴给好友。";
+    }
+  }
+  manual.addEventListener("copy", onCopied);
   byId("copy-invite").addEventListener("click", async () => {
     const link = new URL("./", window.location.href).href;
     const text = message + "\n" + link;
-    const status = byId("share-status");
-    const manual = byId("share-manual");
     try {
       await navigator.clipboard.writeText(text);
-      status.textContent = "口令已复制，可以粘贴给好友。";
+      onCopied();
     } catch {
       manual.value = text;
       manual.hidden = false;
@@ -475,7 +535,7 @@ rules.addEventListener("click", () => showDialog(
   + '<ol class="rules-list"><li>从第 27 轮起，每轮转一次盘、拆蓉城红包，再拆大连掉分红包。两条线都结算后进入下一轮。</li>'
   + '<li>蓉城拿 1 分或大连掉分都能改变争冠结果。第 29 轮是两队直接交锋，两个视角对应同一场比赛。</li>'
   + '<li>助力积分、钻石、碎片和物料用来兑换冠军，联赛积分按真实比分结算。</li>'
-  + '<li>可复制助力口令。挑战在当前页面直接继续。</li></ol>'
+  + '<li>大连掉分红包需复制本轮口令，切走再回来触发游戏内好友助力。第 29 轮可直接拆。</li></ol>'
   + '<a class="rules-reference" href="https://www.cfl-china.cn/zh/content/league/CSL.html" target="_blank" rel="noopener noreferrer">队徽来源 · 中足联 ↗</a>'
   + '<button data-close data-focus class="primary" type="button">知道了</button>',
 ));
