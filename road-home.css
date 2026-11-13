@@ -1,0 +1,156 @@
+.carry-campaign {
+  background: radial-gradient(ellipse at 50% 15%, #fff3d3, #ffd68d 68%, #ffbd6a);
+}
+
+.carry-art {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(30px, .6fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  min-height: 118px;
+  margin: 18px auto 14px;
+  padding: 15px;
+  max-width: 350px;
+  border: 1px solid #ad2b28;
+  border-radius: 16px;
+  background: repeating-linear-gradient(135deg, #fff6dc0d 0 1px, transparent 1px 10px),
+    linear-gradient(132deg, #8c1525, #bf292c);
+  box-shadow: inset 0 0 0 3px #fff3cf26, 0 6px 0 #a8462833;
+}
+
+.carry-trophy {
+  display: block;
+  font-size: clamp(40px, 11vw, 58px);
+  line-height: 1;
+  filter: drop-shadow(0 4px 5px #6a1010);
+}
+
+.carry-route {
+  position: relative;
+  width: 100%;
+  border-block-start: 2px dashed #ffd789;
+}
+
+.carry-route::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -5px;
+  width: 7px;
+  height: 7px;
+  transform: rotate(45deg);
+  border: solid #ffd789;
+  border-width: 2px 2px 0 0;
+}
+
+.carry-ticket {
+  display: grid;
+  place-items: center;
+  min-height: 57px;
+  padding: 7px;
+  border-inline: 3px dotted #9e2530;
+  background: linear-gradient(155deg, #fff1bd, #f6c465);
+  color: #6b1720;
+  font-size: clamp(22px, 7vw, 32px);
+  font-weight: 950;
+  letter-spacing: .06em;
+  text-indent: .06em;
+  transform: rotate(5deg);
+  box-shadow: 0 4px 8px #680d1b70;
+}
+
+.material-icon.chant::before {
+  inset: 18% 2%;
+  border: max(1px, calc(var(--icon-size) * .025)) solid #fbb353;
+  border-radius: calc(var(--icon-size) * .1);
+  clip-path: polygon(0 0, 100% 0, 100% 36%, 92% 46%, 92% 54%, 100% 64%, 100% 100%, 0 100%, 0 64%, 8% 54%, 8% 46%, 0 36%);
+  background: repeating-linear-gradient(150deg, #fff2c014 0 9%, transparent 10% 17%),
+    linear-gradient(155deg, #ed5638 0 38%, #9d1526 75%);
+}
+
+.material-icon.chant::after {
+  content: "喊";
+  inset: 21% 10%;
+  display: grid;
+  place-items: center;
+  border-inline: 1px dashed #ffdc82ba;
+  color: #fff3bc;
+  font-weight: 950;
+  font-size: calc(var(--icon-size) * .36);
+  text-shadow: 0 1px #720e1f;
+}
+
+.material-icon.supply::before {
+  inset: 25% 1%;
+  border: max(1px, calc(var(--icon-size) * .035)) solid #ffcf64;
+  border-radius: calc(var(--icon-size) * .065);
+  clip-path: none;
+  background: linear-gradient(135deg, #e04536, #a41429);
+  box-shadow: inset 0 0 0 1px #ffd68b55;
+}
+
+.material-icon.supply::after {
+  content: "雄起";
+  inset: 25% 2%;
+  width: auto;
+  height: auto;
+  aspect-ratio: auto;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  box-shadow: none;
+  color: #fff2b6;
+  font-size: calc(var(--icon-size) * .26);
+  font-weight: 950;
+  line-height: 1;
+  transform: none;
+}
+
+.full-reveal.reward-chant {
+  --scene-dark: #310712;
+  --scene-light: #a82830;
+  --reward-glow: #ffe5a0;
+  --reward-fill: #eb693e;
+  --hero-animation: full-chant-ticket;
+  --particle-animation: full-chant-confetti;
+}
+
+.reward-chant .reward-stage > i {
+  aspect-ratio: 4 / 1;
+  border-radius: 2px;
+  background: linear-gradient(100deg, #ffce68, #fff2be 48%, #f05c35);
+}
+
+.full-reveal.reward-supply {
+  --hero-animation: full-banner-unroll;
+}
+
+.full-reveal.reward-supply .reward-stage > i {
+  aspect-ratio: 4 / 1;
+  border-radius: 2px;
+  background: linear-gradient(110deg, #ffe48d, #ee5937);
+}
+
+@keyframes full-banner-unroll {
+  0% { opacity: 0; transform: translateY(-48dvh) rotate(-12deg) scaleX(.12); }
+  34% { opacity: 1; transform: translateY(1dvh) rotate(-6deg) scaleX(.24); }
+  62% { transform: rotate(3deg) scaleX(1.12); }
+  82%, 100% { transform: none; }
+}
+
+@keyframes full-chant-ticket {
+  0% { opacity: 0; transform: translateY(26dvh) scale(.28) rotate(-24deg); }
+  30% { opacity: 1; transform: translateY(-5dvh) scale(1.27) rotate(10deg); }
+  51% { transform: scale(.94) rotate(-8deg); }
+  67% { transform: scale(1.1) rotate(4deg); }
+  84%, 100% { transform: none; }
+}
+
+@keyframes full-chant-confetti {
+  0%, 17% { opacity: 0; transform: translate(-50%, -50%) rotate(-35deg) scale(.25); }
+  41%, 60% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--travel-x), var(--travel-y)) rotate(156deg) scale(1.16); }
+}

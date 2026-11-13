@@ -1,25 +1,25 @@
 const matches = [
   { round: 27, date: "10.10", team: "天津津门虎", crest: "tianjin", score: "0 : 1", venue: "主场", prize: 3,
-    note: "补时被绝杀，第一刀砍了个空。",
+    note: "补时被绝杀。嗓子喊哑了，还差一分。",
     source: "https://news.chengdu.cn/2026/1010/6aca3f03f56a2b480c5091c9.shtml" },
   { round: 28, date: "10.18", team: "上海海港", crest: "shanghai", score: "0 : 3", venue: "客场", prize: 1,
-    note: "助力积分到账。联赛积分原地不动。",
+    note: "看台助威值到账，联赛积分还是 52 分。",
     source: "https://sports.cctv.cn/2026/10/18/ARTIUmhr4U16FK61BvoKMNZd261018.shtml" },
   { round: 29, date: "10.24", team: "大连英博", crest: "dalian", score: "0 : 1", venue: "主场", prize: 2,
     note: "碎片到手，冠军点只剩最后一次。",
     source: "https://www.xinhuanet.com/sports/20261026/2d3c75fa81f646f18b41e57ae4214edb/c.html" },
   { round: 30, date: "11.08", team: "山东泰山", crest: "shandong", score: "2 : 3", venue: "客场", prize: 4,
-    note: "冠军物料也凑齐了，快去兑换！",
+    note: "接机横幅都印好了，就等有人把奖杯带回来。",
     source: "https://sc.people.com.cn/n2/2026/1109/c345167-41745287.html" },
 ];
 
 const prizes = [
   { icon: "🏆", name: "冠军奖杯", jackpot: true },
-  { icon: "●", name: "助力积分", material: "points", amount: 100, note: "助力专用，联赛积分 +0" },
-  { icon: "✦", name: "冠军碎片", material: "fragment", amount: 1, note: "距离兑奖只差一份物料" },
-  { icon: "◆", name: "助力钻石", material: "diamond", amount: 1, note: "闪是挺闪，联赛积分 +0" },
-  { icon: "▣", name: "冠军物料", material: "supply", amount: 1, note: "最后一件，兑换条件已达成" },
-  { icon: "↻", name: "再砍一刀" },
+  { name: "看台助威值", wheelLabel: "助威值", material: "points", amount: 100, note: "看台加了 100，联赛积分 +0" },
+  { name: "冠军碎片", material: "fragment", amount: 1, note: "离把奖杯带回成都只差一件" },
+  { name: "凤凰山呐喊券", wheelLabel: "呐喊券", material: "chant", amount: 1, note: "喊一声雄起，联赛积分 +0" },
+  { name: "冠军接机横幅", wheelLabel: "接机横幅", material: "supply", amount: 1, note: "欢迎冠军回成都，横幅已经备好" },
+  { icon: "🧳", name: "空箱返程" },
 ];
 
 const dalianMatches = [
@@ -56,6 +56,8 @@ let phase = "ready";
 let rotation = 0;
 let timer;
 let friendAssist = null;
+const spinDuration = 4400;
+face.style.setProperty("--spin-duration", spinDuration + "ms");
 const hand = '<span class="guide-hand" aria-hidden="true">☝️</span>';
 const burst = '<span class="burst" aria-hidden="true"></span>';
 const materials = [prizes[3], prizes[1], prizes[2], prizes[4]];
@@ -71,7 +73,7 @@ prizes.forEach((prize, index) => {
   wedge.className = prize.jackpot ? "prize prize-jackpot" : "prize";
   wedge.style.setProperty("--angle", index * 60 - 180 + "deg");
   const icon = prize.material ? materialIcon(prize) : "<b>" + prize.icon + "</b>";
-  wedge.innerHTML = icon + "<span>" + prize.name + "</span>";
+  wedge.innerHTML = icon + "<span>" + (prize.wheelLabel ?? prize.name) + "</span>";
   face.append(wedge);
 });
 
@@ -166,12 +168,12 @@ function render() {
   invite.lastChild.textContent = complete ? " 分享夺冠挑战" : " 邀请好友助力";
   const labels = {
     ready: ["打开转盘砍一刀", "本轮还有 1 次免费机会"],
-    spinning: ["正在砍价…", "转盘正在揭晓本轮红包"],
-    packet: ["拆开本轮红包", "红包已到账，拆开看比分"],
+    spinning: ["正在转盘…", "看看这一轮能带回成都啥子"],
+    carry: ["打包带回成都", "这一刀砍完了，看看行李里装了啥子"],
     result: dalianKnown
       ? ["进入下一轮", "蓉城 +0，大连 +3，夺冠还差 1 分"]
       : ["助力大连输球", "蓉城 +0。大连这场掉分，冠军就到手。"],
-    finale: ["兑换冠军", "冠军物料已集齐，快去兑换！"],
+    finale: ["兑换冠军", "接机都准备好了，去领冠军！"],
     complete: ["再玩一次", "四轮拿了 0 分，冠军还是差 1 分"],
   };
   [byId("main-label").textContent, byId("game-status").textContent] = labels[phase];
@@ -235,32 +237,35 @@ function showWheel() {
   spin.focus({ preventScroll: true });
 }
 
-function showPacket() {
+function showCarry() {
   const match = matches[roundIndex];
   showDialog(
-    burst + '<h2 id="modal-title">哇！助力红包掉下来啦！</h2>'
-    + '<p>第 ' + match.round + ' 轮 · 抽中「' + prizes[match.prize].name + '」</p>'
-    + '<div class="big-packet"><button id="open-packet" data-focus class="packet-open" type="button" aria-label="拆红包揭晓比分">开' + hand + '</button></div>'
-    + '<p class="envelope-note">拆开红包，看看这一刀砍了多少分</p>',
-    "envelope hype campaign",
+    '<p class="hype-kicker">第 ' + match.round + ' 轮</p>'
+    + '<h2 id="modal-title">奖杯能带回成都吗？</h2>'
+    + '<div class="carry-art" aria-hidden="true"><span class="carry-trophy">🏆</span>'
+    + '<span class="carry-route"></span><span class="carry-ticket">成都</span></div>'
+    + resultButton("carry-home", "打包带回成都"),
+    "hype campaign carry-campaign",
   );
-  byId("open-packet").addEventListener("click", () => {
+  byId("carry-home").addEventListener("click", () => {
     const prize = prizes[match.prize];
-    playResultLines(["恭喜你！", "这一刀还是差 1 分！", "但是你获得了" + prize.name + "！"], () => {
-      revealed = roundIndex + 1;
-      if (isDirectMatch()) dalianRevealed = revealed;
-      finishRound();
-      render();
-      showMatch(roundIndex, true);
+    showRewardReveal(prize, () => {
+      playResultLines(["打包完成！", "奖杯还差一分！", "带回成都的是" + prize.name + "！"], () => {
+        revealed = roundIndex + 1;
+        if (isDirectMatch()) dalianRevealed = revealed;
+        finishRound();
+        render();
+        showMatch(roundIndex, true);
+      });
     });
-  });
+  }, { once: true });
 }
 
 const rewardScenes = {
-  diamond: "天降钻石！",
-  points: "积分雨来啦！",
+  chant: "凤凰山，雄起！",
+  points: "看台助威值飙升！",
   fragment: "冠军碎片正在合体！",
-  supply: "冠军物料从天而降！",
+  supply: "接机横幅送达！",
 };
 
 fullReveal.addEventListener("cancel", (event) => event.preventDefault());
@@ -289,16 +294,15 @@ function playResultLines(lines, onFinish) {
   playFullReveal("result-reveal", text, 3000, onFinish);
 }
 
-function showRewardReveal() {
-  const prize = prizes[matches[roundIndex].prize];
+function showRewardReveal(prize, onFinish) {
   playFullReveal(
     "reward-reveal reward-" + prize.material,
     '<h2>' + rewardScenes[prize.material] + '</h2>'
     + '<div class="reward-stage" aria-hidden="true">' + '<i></i>'.repeat(6)
     + '<div class="reward-hero">' + materialIcon(prize) + '</div></div>'
-    + '<p class="reward">抽中' + prize.name + ' ×' + prize.amount + '</p>',
+    + '<p class="reward">' + prize.name + ' ×' + prize.amount + '</p>',
     1500,
-    showPacket,
+    onFinish,
   );
 }
 
@@ -347,13 +351,13 @@ function showMatch(index, fresh) {
   const match = matches[index];
   const dalianKnown = index < dalianRevealed;
   const prize = prizes[match.prize];
-  const heading = fresh ? "恭喜！没砍成功，但你获得了" + prize.name + "！" : "第 " + match.round + " 轮赛果";
+  const heading = fresh ? "这一趟带回了" + prize.name + "！" : "第 " + match.round + " 轮赛果";
   let action = recordButton(index);
   if (fresh && !dalianKnown) action = resultButton("match-assist", "赶紧助力大连输球！");
   else if (fresh && phase === "finale") action = resultButton("claim-finale", "去兑换冠军");
   else if (fresh && phase === "result") action = resultButton("next-round", "去下一轮再砍");
   showDialog(
-    (fresh ? burst + '<p class="hype-kicker">助力大奖已到账</p>' : '')
+    (fresh ? burst + '<p class="hype-kicker">第 ' + match.round + ' 轮结算</p>' : '')
     + '<h2 id="modal-title">' + heading + '</h2>'
     + (fresh ? lootList([prize]) : '')
     + matchBox(match, "成都蓉城", "chengdu", match.round)
@@ -465,7 +469,7 @@ function showDalianResult(index, fresh) {
   byId("claim-finale")?.addEventListener("click", showCollected);
   byId("chengdu-details")?.addEventListener("click", () => showMatch(index, fresh));
   byId("back-chengdu")?.addEventListener("click", () => {
-    if (phase === "packet") showRewardReveal();
+    if (phase === "carry") showCarry();
     else showWheel();
   });
   bindRecordButton(index);
@@ -523,20 +527,20 @@ function startSpin() {
   if (phase !== "ready") return;
   phase = "spinning";
   const target = (360 - matches[roundIndex].prize * 60) % 360;
-  rotation += 1440 + (target - rotation % 360 + 360) % 360;
+  rotation += 2520 + (target - rotation % 360 + 360) % 360;
   face.style.transform = "rotate(" + rotation + "deg)";
   render();
   byId("wheel-status").textContent = "正在结算这一刀……";
   content.querySelector("[data-close]").disabled = true;
   timer = window.setTimeout(() => {
-    phase = "packet";
+    phase = "carry";
     render();
     if (friendAssist?.round === roundIndex && friendAssist.unlocked && !friendAssist.notified) {
       showAssistSuccess();
     } else {
-      showRewardReveal();
+      showCarry();
     }
-  }, reduceMotion.matches ? 0 : 1350);
+  }, reduceMotion.matches ? 0 : spinDuration + 80);
 }
 
 function nextRound() {
@@ -615,17 +619,17 @@ function showInvite(forDalian = false, returnToWheel = false) {
     if (forDalian) showDalianAssist();
     else if (returnToWheel) showWheel();
     else if (phase === "result") showMatch(roundIndex, true);
-    else if (phase === "packet") showRewardReveal();
+    else if (phase === "carry") showCarry();
     else modal.close();
   });
 }
 
 rules.addEventListener("click", () => showDialog(
   '<h2 id="modal-title">活动规则</h2>'
-  + '<ol class="rules-list"><li>从第 27 轮起，每轮转盘拆蓉城红包。第 27、28、30 轮还需拆大连掉分红包。</li>'
+  + '<ol class="rules-list"><li>每轮转盘停下后，点「打包带回成都」揭晓奖励和赛果。</li>'
   + '<li>蓉城拿 1 分或大连掉分都能改变争冠结果。第 29 轮是两队直接交锋，两个视角对应同一场比赛。</li>'
-  + '<li>助力积分、钻石、碎片和物料用来兑换冠军，联赛积分按真实比分结算。</li>'
-  + '<li>大连掉分红包需复制本轮口令，切走再回来触发游戏内好友助力。第 29 轮拆蓉城红包即结算双方。</li></ol>'
+  + '<li>呐喊券、助威值、冠军碎片和接机横幅凑齐后可以兑奖。</li>'
+  + '<li>第 27、28、30 轮的大连掉分红包可复制口令解锁。第 29 轮直接结算双方。</li></ol>'
   + '<a class="rules-reference" href="https://www.cfl-china.cn/zh/content/league/CSL.html" target="_blank" rel="noopener noreferrer">队徽来源 · 中足联 ↗</a>'
   + '<button data-close data-focus class="primary" type="button">知道了</button>',
 ));
@@ -633,7 +637,7 @@ rules.addEventListener("click", () => showDialog(
 spin.addEventListener("click", startSpin);
 mainAction.addEventListener("click", () => {
   if (phase === "ready") showWheel();
-  else if (phase === "packet") showRewardReveal();
+  else if (phase === "carry") showCarry();
   else if (phase === "result" && dalianRevealed <= roundIndex) showDalianAssist();
   else if (phase === "result") nextRound();
   else if (phase === "finale") showCollected();

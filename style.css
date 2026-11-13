@@ -91,7 +91,7 @@ h1 em { color: #ffdc71; font-style: normal; }
 .wheel { position: relative; isolation: isolate; margin: auto; width: min(100%, 285px); aspect-ratio: 1; border-radius: 50%; background: linear-gradient(145deg, #ffea96, #f5a035 48%, #ffcf64 72%, #ef922b); box-shadow: 0 7px 0 #cf6825, 0 11px 19px #a63d2355, inset 0 0 0 2px #ffebac; }
 .wheel-rim { position: absolute; inset: 0; pointer-events: none; }
 .wheel-rim i { position: absolute; width: 2%; aspect-ratio: 1; top: 50%; left: 50%; border-radius: 50%; background: #fff8c5; box-shadow: 0 0 5px #fff4a1; transform: translate(-50%, -50%) rotate(var(--angle)) translateY(calc(-1 * var(--radius, 0px))); }
-.wheel-face { position: absolute; inset: 5.3%; border-radius: 50%; background: repeating-conic-gradient(from -30deg, #fff4ce 0deg 59deg, #ffcd7c 59deg 60deg, #ffd78e 60deg 119deg, #ffcd7c 119deg 120deg); border: 2px solid #c9742b; transition: transform 1.32s cubic-bezier(.12,.69,.16,1); }
+.wheel-face { position: absolute; inset: 5.3%; border-radius: 50%; background: repeating-conic-gradient(from -30deg, #fff4ce 0deg 59deg, #ffcd7c 59deg 60deg, #ffd78e 60deg 119deg, #ffcd7c 119deg 120deg); border: 2px solid #c9742b; transition: transform var(--spin-duration, 4400ms) cubic-bezier(.15,.72,.15,1); }
 .prize { position: absolute; top: 50%; left: 50%; width: 34%; height: 50%; transform-origin: 50% 0; transform: translateX(-50%) rotate(var(--angle)); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 4%; gap: 2px; color: #7f2921; font-size: clamp(10px, 3vw, 13px); font-weight: 850; line-height: 1; }
 .prize b, .prize span { transform: rotate(180deg); }
 .prize b { font-size: clamp(16px, 5vw, 23px); line-height: 1.1; color: #b82a26; }
