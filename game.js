@@ -45,6 +45,7 @@ const friendPacket = byId("friend-packet");
 const rules = byId("rules");
 const reset = byId("reset");
 const modal = byId("modal");
+const fullReveal = byId("full-reveal");
 const content = byId("modal-content");
 const list = byId("rounds");
 const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -244,11 +245,14 @@ function showPacket() {
     "envelope hype campaign",
   );
   byId("open-packet").addEventListener("click", () => {
-    revealed = roundIndex + 1;
-    if (isDirectMatch()) dalianRevealed = revealed;
-    finishRound();
-    render();
-    showMatch(roundIndex, true);
+    const prize = prizes[match.prize];
+    playResultLines(["恭喜你！", "这一刀还是差 1 分！", "但是你获得了" + prize.name + "！"], () => {
+      revealed = roundIndex + 1;
+      if (isDirectMatch()) dalianRevealed = revealed;
+      finishRound();
+      render();
+      showMatch(roundIndex, true);
+    });
   });
 }
 
@@ -259,17 +263,43 @@ const rewardScenes = {
   supply: "冠军物料从天而降！",
 };
 
+fullReveal.addEventListener("cancel", (event) => event.preventDefault());
+
+function playFullReveal(className, html, duration, onFinish) {
+  if (reduceMotion.matches) {
+    onFinish();
+    return;
+  }
+  fullReveal.className = "full-reveal " + className;
+  fullReveal.innerHTML = html;
+  fullReveal.showModal();
+  const lastLine = fullReveal.querySelector(".result-line:last-child");
+  const fallback = window.setTimeout(finish, duration + (lastLine ? 200 : 0));
+  lastLine?.addEventListener("animationend", finish, { once: true });
+  function finish() {
+    window.clearTimeout(fallback);
+    fullReveal.close();
+    fullReveal.replaceChildren();
+    onFinish();
+  }
+}
+
+function playResultLines(lines, onFinish) {
+  const text = lines.map((line) => '<span class="result-line">' + line + '</span>').join("");
+  playFullReveal("result-reveal", text, 3000, onFinish);
+}
+
 function showRewardReveal() {
   const prize = prizes[matches[roundIndex].prize];
-  showDialog(
-    '<h2 id="modal-title">' + rewardScenes[prize.material] + '</h2>'
+  playFullReveal(
+    "reward-reveal reward-" + prize.material,
+    '<h2>' + rewardScenes[prize.material] + '</h2>'
     + '<div class="reward-stage" aria-hidden="true">' + '<i></i>'.repeat(6)
     + '<div class="reward-hero">' + materialIcon(prize) + '</div></div>'
-    + '<p class="reward">抽中' + prize.name + ' ×' + prize.amount + '</p>'
-    + resultButton("reveal-packet", "去拆本轮红包"),
-    "reward-reveal reward-" + prize.material,
+    + '<p class="reward">抽中' + prize.name + ' ×' + prize.amount + '</p>',
+    1500,
+    showPacket,
   );
-  byId("reveal-packet").addEventListener("click", showPacket);
 }
 
 function matchBox(match, team, teamCrest, round) {
@@ -364,10 +394,12 @@ function showDalianAssist() {
   );
   byId("open-dalian").addEventListener("click", () => {
     if (!canOpenDalian()) return;
-    dalianRevealed = roundIndex + 1;
-    finishRound();
-    render();
-    showDalianResult(roundIndex, true);
+    playResultLines(["助力已到账！", "然而……大连又赢了！", "成功砍掉 0 分！"], () => {
+      dalianRevealed = roundIndex + 1;
+      finishRound();
+      render();
+      showDalianResult(roundIndex, true);
+    });
   });
   byId("invite-dalian")?.addEventListener("click", () => showInvite(true));
 }
