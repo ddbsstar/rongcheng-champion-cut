@@ -14,7 +14,7 @@ const matches = [
 ];
 
 const prizes = [
-  { icon: "★", name: "冠军奖杯" },
+  { icon: "🏆", name: "冠军奖杯", jackpot: true },
   { icon: "●", name: "助力积分", material: "points", amount: 100, note: "助力专用，联赛积分 +0" },
   { icon: "✦", name: "冠军碎片", material: "fragment", amount: 1, note: "距离兑奖只差一份物料" },
   { icon: "◆", name: "助力钻石", material: "diamond", amount: 1, note: "闪是挺闪，联赛积分 +0" },
@@ -67,7 +67,7 @@ for (let index = 0; index < 24; index += 1) {
 
 prizes.forEach((prize, index) => {
   const wedge = document.createElement("div");
-  wedge.className = "prize";
+  wedge.className = prize.jackpot ? "prize prize-jackpot" : "prize";
   wedge.style.setProperty("--angle", index * 60 - 180 + "deg");
   const icon = prize.material ? materialIcon(prize) : "<b>" + prize.icon + "</b>";
   wedge.innerHTML = icon + "<span>" + prize.name + "</span>";

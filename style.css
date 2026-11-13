@@ -87,6 +87,13 @@ h1 em { color: #ffdc71; font-style: normal; }
 .prize { position: absolute; top: 50%; left: 50%; width: 34%; height: 50%; transform-origin: 50% 0; transform: translateX(-50%) rotate(var(--angle)); display: flex; flex-direction: column; justify-content: flex-end; align-items: center; padding-bottom: 4%; gap: 2px; color: #7f2921; font-size: clamp(10px, 3vw, 13px); font-weight: 850; line-height: 1; }
 .prize b, .prize span { transform: rotate(180deg); }
 .prize b { font-size: clamp(16px, 5vw, 23px); line-height: 1.1; color: #b82a26; }
+.wheel-face:has(.prize-jackpot) {
+  background: conic-gradient(from -30deg, #851125 0deg, #ba242e 30deg, #851125 59deg, #ffe58e 59deg 61deg, transparent 61deg 359deg, #ffe58e 359deg),
+    repeating-conic-gradient(from -30deg, #fff4ce 0deg 59deg, #ffcd7c 59deg 60deg, #ffd78e 60deg 119deg, #ffcd7c 119deg 120deg);
+}
+.prize-jackpot { gap: 3px; }
+.prize-jackpot b { font-family: "Segoe UI Emoji", "Apple Color Emoji", sans-serif; font-size: clamp(25px, 8vw, 36px); filter: drop-shadow(0 0 5px #ffcd5daa); }
+.prize-jackpot span { padding: 3px 5px; border-radius: 99px; background: #ffdb78; color: #631322; font-weight: 950; white-space: nowrap; }
 .pointer { position: absolute; top: -5px; left: 50%; transform: translateX(-50%); width: 30px; height: 35px; background: linear-gradient(#fa4227, #a9111d); clip-path: polygon(0 0,100% 0,50% 100%); filter: drop-shadow(0 2px 0 #a31714); z-index: 2; }
 .spin { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); display: grid; place-content: center; gap: 1px; width: 32%; aspect-ratio: 1; color: #fff6ce; border-radius: 50%; border: 3px solid #ffe590; box-shadow: 0 2px 0 #9c171d, 0 0 0 2px #be4524, inset 0 2px 3px #ff9e65; background: linear-gradient(#f5573c, #c71722); }
 .spin strong { font-size: clamp(13px, 4vw, 19px); }
