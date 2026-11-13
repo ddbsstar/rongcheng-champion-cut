@@ -389,7 +389,8 @@ function showDalianAssist() {
     + '<p class="envelope-note">' + (unlocked ? '好友助力已到账，点「开」揭晓比分。'
         : waiting ? '口令已复制，切到聊天或其他页面，再回来解锁。'
           : '先复制口令求助，离开页面再回来解锁红包。') + '</p>'
-    + (unlocked ? '' : resultButton("invite-dalian", "复制口令，求助" + match.team)),
+    + (unlocked ? '' : waiting ? resultButton("confirm-assist-return", "我回来了")
+      : resultButton("invite-dalian", "复制口令，求助" + match.team)),
     "envelope hype",
   );
   byId("open-dalian").addEventListener("click", () => {
@@ -402,6 +403,7 @@ function showDalianAssist() {
     });
   });
   byId("invite-dalian")?.addEventListener("click", () => showInvite(true));
+  byId("confirm-assist-return")?.addEventListener("click", unlockFriendAssist);
 }
 
 function isDirectMatch(index = roundIndex) {
@@ -424,13 +426,18 @@ function showAssistSuccess() {
   byId("claim-assist").addEventListener("click", showDalianAssist);
 }
 
+function unlockFriendAssist() {
+  if (friendAssist?.round !== roundIndex || friendAssist.unlocked) return;
+  friendAssist.unlocked = true;
+  if (phase !== "spinning") showAssistSuccess();
+}
+
 document.addEventListener("visibilitychange", () => {
   if (friendAssist?.round !== roundIndex || friendAssist.unlocked) return;
   if (document.hidden) {
     friendAssist.left = true;
   } else if (friendAssist.left) {
-    friendAssist.unlocked = true;
-    if (phase !== "spinning") showAssistSuccess();
+    unlockFriendAssist();
   }
 });
 
@@ -472,7 +479,29 @@ function showCollected() {
     + resultButton("redeem-champion", "立即兑换中超冠军"),
     "hype campaign collected-campaign",
   );
-  byId("redeem-champion").addEventListener("click", showFinale);
+  byId("redeem-champion").addEventListener("click", playRedemption);
+}
+
+function playRedemption() {
+  const progress = document.querySelector(".champion-progress");
+  const status = byId("champion-progress-status");
+  modal.close();
+  byId("main-action").disabled = true;
+  byId("reset").disabled = true;
+  byId("invite").disabled = true;
+  byId("rules").disabled = true;
+  assist.disabled = true;
+  list.inert = true;
+  progress.classList.add("redemption-running");
+  status.textContent = "兑换中…";
+  const reduced = reduceMotion.matches;
+  window.setTimeout(() => { status.textContent = "100%"; }, reduced ? 0 : 600);
+  window.setTimeout(() => { status.textContent = "兑奖失败 · 还差 1 分"; }, reduced ? 350 : 1250);
+  window.setTimeout(() => {
+    list.inert = false;
+    progress.classList.remove("redemption-running");
+    showFinale();
+  }, reduced ? 600 : 1650);
 }
 
 function showFinale() {
@@ -549,17 +578,21 @@ function showInvite(forDalian = false, returnToWheel = false) {
     + '<p class="share-copy">' + message + '</p>'
     + '<button class="primary" id="copy-invite" data-focus type="button">复制助力口令</button>'
     + '<p class="share-status" id="share-status" role="status"></p>'
+    + '<button class="primary" id="share-return" type="button" hidden>我回来了</button>'
     + '<textarea id="share-manual" class="share-manual" aria-label="助力口令" readonly hidden></textarea>'
     + '<button class="secondary" id="return-game" type="button">返回挑战</button>',
   );
   const status = byId("share-status");
   const manual = byId("share-manual");
+  const shareReturn = byId("share-return");
+  shareReturn.addEventListener("click", unlockFriendAssist);
   function onCopied() {
     if (!status.isConnected) return;
     if (needsAssist && roundIndex === invitedRound && dalianRevealed <= invitedRound && !canOpenDalian()) {
       friendAssist ??= { round: invitedRound, left: false, unlocked: false, notified: false };
       if (document.hidden) friendAssist.left = true;
       status.textContent = "口令已复制。切到聊天或其他页面，再回来解锁红包。";
+      shareReturn.hidden = false;
     } else {
       status.textContent = "口令已复制，可以粘贴给好友。";
     }
