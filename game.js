@@ -169,11 +169,11 @@ function render() {
   const labels = {
     ready: ["打开转盘砍一刀", "本轮还有 1 次免费机会"],
     spinning: ["正在转盘…", "看看这一轮能带回成都啥子"],
-    carry: ["打包带回成都", "这一刀砍完了，看看行李里装了啥子"],
+    carry: ["打包带回成都", "看看这一刀能不能把冠军装进行李"],
     result: dalianKnown
       ? ["进入下一轮", "蓉城 +0，大连 +3，夺冠还差 1 分"]
       : ["助力大连输球", "蓉城 +0。大连这场掉分，冠军就到手。"],
-    finale: ["兑换冠军", "接机都准备好了，去领冠军！"],
+    finale: ["确认冠军入袋", "接机横幅都展开了，就等奖杯！"],
     complete: ["再玩一次", "四轮拿了 0 分，冠军还是差 1 分"],
   };
   [byId("main-label").textContent, byId("game-status").textContent] = labels[phase];
@@ -241,7 +241,7 @@ function showCarry() {
   const match = matches[roundIndex];
   showDialog(
     '<p class="hype-kicker">第 ' + match.round + ' 轮</p>'
-    + '<h2 id="modal-title">奖杯能带回成都吗？</h2>'
+    + '<h2 id="modal-title">冠军能入袋不？</h2>'
     + '<div class="carry-art" aria-hidden="true"><span class="carry-trophy">🏆</span>'
     + '<span class="carry-route"></span><span class="carry-ticket">成都</span></div>'
     + resultButton("carry-home", "打包带回成都"),
@@ -250,7 +250,7 @@ function showCarry() {
   byId("carry-home").addEventListener("click", () => {
     const prize = prizes[match.prize];
     showRewardReveal(prize, () => {
-      playResultLines(["打包完成！", "奖杯还差一分！", "带回成都的是" + prize.name + "！"], () => {
+      playResultLines(["行李已打包！", "冠军入袋还差一分！", "带回成都的是" + prize.name + "！"], () => {
         revealed = roundIndex + 1;
         if (isDirectMatch()) dalianRevealed = revealed;
         finishRound();
@@ -480,7 +480,7 @@ function showCollected() {
     burst + '<p class="hype-kicker">冠军兑换资格已达成</p>'
     + '<h2 id="modal-title">恭喜你集齐了！</h2>'
     + lootList(materials)
-    + resultButton("redeem-champion", "立即兑换中超冠军"),
+    + resultButton("redeem-champion", "确认冠军入袋"),
     "hype campaign collected-campaign",
   );
   byId("redeem-champion").addEventListener("click", playRedemption);
@@ -499,7 +499,7 @@ function playRedemption() {
   progress.classList.add("redemption-running");
   status.textContent = "兑换中…";
   const reduced = reduceMotion.matches;
-  window.setTimeout(() => { status.textContent = "100%"; }, reduced ? 0 : 600);
+  window.setTimeout(() => { status.textContent = "100% · 冠军入袋！"; }, reduced ? 0 : 600);
   window.setTimeout(() => { status.textContent = "兑奖失败 · 还差 1 分"; }, reduced ? 350 : 1250);
   window.setTimeout(() => {
     list.inert = false;
