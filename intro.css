@@ -19,8 +19,24 @@
   background: repeating-conic-gradient(from 8deg at 50% 50%, #ffe58a35 0deg 9deg, transparent 9deg 24deg);
 }
 
-.opening-sequence span {
+.opening-crest {
   grid-area: 1 / 1;
+  align-self: end;
+  width: clamp(70px, 19vw, 104px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  margin-bottom: clamp(8px, 2vh, 20px);
+  filter: drop-shadow(0 4px 9px #68121c) drop-shadow(0 0 12px #ffda83);
+  animation: opening-crest-arrive .48s ease-out both;
+}
+
+.opening-sequence {
+  grid-template-rows: minmax(0, 1fr) minmax(100px, 23vh) minmax(0, 1fr);
+}
+
+.opening-sequence span {
+  grid-area: 2 / 1;
   max-width: min(86vw, 900px);
   font-size: clamp(40px, 10vw, 104px);
   font-weight: 950;
@@ -30,9 +46,15 @@
   animation: opening-slam 1s both;
 }
 
-.opening-sequence span:first-child { font-size: clamp(65px, 18vw, 150px); }
-.opening-sequence span:nth-child(2) { animation-delay: 1s; color: #fff9df; }
-.opening-sequence span:nth-child(3) { animation-delay: 2s; }
+.opening-sequence span:nth-of-type(1) { font-size: clamp(65px, 18vw, 150px); }
+.opening-sequence span:nth-of-type(2) { animation-delay: 1s; color: #fff9df; }
+.opening-sequence span:nth-of-type(3) { animation-delay: 2s; }
+
+@keyframes opening-crest-arrive {
+  0% { opacity: 0; transform: translateY(-20px) scale(.65); }
+  70% { opacity: 1; transform: scale(1.08); }
+  100% { opacity: 1; transform: scale(1); }
+}
 
 @keyframes opening-slam {
   0% { opacity: 0; transform: scale(2.05); }
