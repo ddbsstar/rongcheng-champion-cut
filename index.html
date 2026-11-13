@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ce1721">
+  <title>蓉城夺冠 · 砍一刀</title>
+  <meta name="description" content="只差 1 分就能领中超冠军。转盘、拆红包，重走成都蓉城最后四轮争冠路。">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="effects.css">
+  <link rel="stylesheet" href="campaign.css">
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./"><span class="brand-ball" aria-hidden="true">足</span> 蓉城夺冠</a>
+      <button class="rule-button" id="rules" type="button">活动规则</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="banner" aria-labelledby="title">
+      <div class="banner-copy">
+        <p>2026 中超 <span>·</span> 球迷助力挑战</p>
+        <h1 id="title">砍一刀<span>，</span><em>领冠军！</em></h1>
+        <p class="banner-note">再拿一分，奖杯带回成都</p>
+      </div>
+      <div class="trophy" aria-hidden="true">
+        <i class="trophy-star star-one">✦</i><i class="trophy-star star-two">✧</i><i class="trophy-star star-three">✦</i>
+        <i class="trophy-handles"></i><i class="trophy-cup">★</i><i class="trophy-stem"></i><i class="trophy-base"></i>
+      </div>
+    </section>
+
+    <div class="layout">
+      <section class="play-card" aria-label="夺冠助力活动">
+        <div class="gap-panel">
+          <p class="gap-copy" id="gap-copy">距锁定中超冠军还差</p>
+          <div class="gap-value"><strong>1</strong><span>分</span></div>
+          <div class="track" aria-label="成都蓉城 52 分，锁定目标 53 分"><span></span></div>
+          <div class="track-label"><span><b>52</b> 分 · 成都蓉城</span><span>锁定目标 <b>53</b> 分</span></div>
+        </div>
+
+        <div class="turn-label"><span id="round-label">第 27 轮</span><span class="turn-dot"></span><span id="round-context">第 1 / 4 次冠军点</span></div>
+        <p class="versus-label" id="versus-label">成都蓉城 vs 天津津门虎</p>
+
+        <div hidden><div class="wheel-area" id="wheel-area">
+          <div class="wheel" id="wheel">
+            <div class="wheel-rim" aria-hidden="true" id="wheel-rim"></div>
+            <div class="wheel-face" id="wheel-face" aria-hidden="true"></div>
+            <span class="pointer" aria-hidden="true"></span>
+            <button id="spin" type="button" class="spin"><strong>砍一刀</strong><small>还剩 1 次</small><span class="guide-hand" aria-hidden="true">☝️</span></button>
+          </div>
+          <button id="friend-packet" type="button" class="friend-packet"><span class="packet-icon" aria-hidden="true"></span><span>好友红包</span></button>
+        </div></div>
+
+        <div class="inventory" id="inventory" aria-label="冠军兑换道具"></div>
+        <p class="game-status" id="game-status" role="status">本轮还有 1 次免费机会</p>
+        <div class="actions">
+          <button class="primary" id="main-action" type="button"><span id="main-label">打开转盘砍一刀</span><span id="main-guide" class="guide-hand" aria-hidden="true">☝️</span></button>
+          <button class="assist-dalian" id="assist-dalian" type="button"><img src="crests/dalian.png" alt="" width="26" height="26"><span id="assist-label">助力大连输球</span></button>
+          <button class="secondary" id="invite" type="button"><span class="packet-icon" aria-hidden="true"></span> 邀请好友助力</button>
+        </div>
+      </section>
+
+      <section class="records" aria-labelledby="record-title">
+        <div class="record-header"><h2 id="record-title">争冠双线</h2><span id="record-count">已结算 0 / 4 轮</span></div>
+        <div class="dalian-track">
+          <img src="crests/dalian.png" alt="" width="32" height="32">
+          <span><b>大连英博</b><small id="dalian-status">成都领先 12 分</small></span>
+          <strong id="dalian-points">40 分</strong>
+        </div>
+        <ol id="rounds"></ol>
+        <div class="season-result" id="season-result" hidden>
+          <strong>蓉城四连败，大连四连胜。</strong>
+          <p>成都蓉城和大连英博最终同积 52 分。大连凭相互战绩优势夺冠，成都获得亚军。</p>
+          <a href="https://sc.people.com.cn/n2/2026/1109/c345167-41745287.html" target="_blank" rel="noopener noreferrer">收官报道 ↗</a>
+        </div>
+        <button class="reset" id="reset" type="button" disabled>↻ 重新开局</button>
+      </section>
+    </div>
+  </main>
+
+  <footer>球迷二创 · 互动道具为虚构 · 比分来自 2026 中超真实赛果</footer>
+
+  <dialog id="modal" aria-labelledby="modal-title">
+    <div id="modal-content"></div>
+  </dialog>
+</body>
+</html>
