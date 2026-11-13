@@ -249,6 +249,26 @@ function showPacket() {
   });
 }
 
+const rewardScenes = {
+  diamond: "天降钻石！",
+  points: "积分雨来啦！",
+  fragment: "冠军碎片正在合体！",
+  supply: "冠军物料从天而降！",
+};
+
+function showRewardReveal() {
+  const prize = prizes[matches[roundIndex].prize];
+  showDialog(
+    '<h2 id="modal-title">' + rewardScenes[prize.material] + '</h2>'
+    + '<div class="reward-stage" aria-hidden="true">' + '<i></i>'.repeat(6)
+    + '<div class="reward-hero">' + materialIcon(prize) + '</div></div>'
+    + '<p class="reward">抽中' + prize.name + ' ×' + prize.amount + '</p>'
+    + resultButton("reveal-packet", "去拆本轮红包"),
+    "reward-reveal reward-" + prize.material,
+  );
+  byId("reveal-packet").addEventListener("click", showPacket);
+}
+
 function matchBox(match, team, teamCrest, round) {
   return '<div class="match-box' + (teamCrest === "dalian" ? ' dalian-reveal' : '') + '"><div class="match-round">第 ' + round + ' 轮 · ' + match.date + ' · ' + team + match.venue + '</div>'
     + '<div class="match-grid"><div class="match-team">' + crest(teamCrest) + '<span>' + team + '</span></div>'
@@ -405,7 +425,7 @@ function showDalianResult(index, fresh) {
   byId("claim-finale")?.addEventListener("click", showCollected);
   byId("chengdu-details")?.addEventListener("click", () => showMatch(index, fresh));
   byId("back-chengdu")?.addEventListener("click", () => {
-    if (phase === "packet") showPacket();
+    if (phase === "packet") showRewardReveal();
     else showWheel();
   });
   bindRecordButton(index);
@@ -452,7 +472,7 @@ function startSpin() {
     if (friendAssist?.round === roundIndex && friendAssist.unlocked && !friendAssist.notified) {
       showAssistSuccess();
     } else {
-      showPacket();
+      showRewardReveal();
     }
   }, reduceMotion.matches ? 0 : 1350);
 }
@@ -529,7 +549,7 @@ function showInvite(forDalian = false, returnToWheel = false) {
     if (forDalian) showDalianAssist();
     else if (returnToWheel) showWheel();
     else if (phase === "result") showMatch(roundIndex, true);
-    else if (phase === "packet") showPacket();
+    else if (phase === "packet") showRewardReveal();
     else modal.close();
   });
 }
@@ -547,7 +567,7 @@ rules.addEventListener("click", () => showDialog(
 spin.addEventListener("click", startSpin);
 mainAction.addEventListener("click", () => {
   if (phase === "ready") showWheel();
-  else if (phase === "packet") showPacket();
+  else if (phase === "packet") showRewardReveal();
   else if (phase === "result" && dalianRevealed <= roundIndex) showDalianAssist();
   else if (phase === "result") nextRound();
   else if (phase === "finale") showCollected();

@@ -1,0 +1,226 @@
+.modal-inner.reward-reveal {
+  --scene-dark: #0b2354;
+  --scene-light: #224c86;
+  --reward-glow: #8ee8ff;
+  --reward-fill: #468fda;
+  --hero-animation: reward-diamond-drop;
+  --particle-animation: reward-diamond-rain;
+  isolation: isolate;
+  overflow: hidden;
+  padding: 24px 20px 20px;
+  color: #fff9e9;
+  background: radial-gradient(ellipse at 50% 42%, var(--scene-light), var(--scene-dark) 74%);
+}
+
+.modal-inner.reward-points {
+  --scene-dark: #5f0e20;
+  --scene-light: #a92c22;
+  --reward-glow: #ffe299;
+  --reward-fill: #f2a936;
+  --hero-animation: reward-points-roll;
+  --particle-animation: reward-point-shower;
+}
+
+.modal-inner.reward-fragment {
+  --scene-dark: #341155;
+  --scene-light: #692b88;
+  --reward-glow: #f5c5ff;
+  --reward-fill: #ba73e7;
+  --hero-animation: reward-fragment-merge;
+  --particle-animation: reward-shard-converge;
+}
+
+.modal-inner.reward-supply {
+  --scene-dark: #522816;
+  --scene-light: #985012;
+  --reward-glow: #ffdd85;
+  --reward-fill: #e89b32;
+  --hero-animation: reward-supply-land;
+  --particle-animation: reward-crate-burst;
+}
+
+.reward-reveal .close {
+  color: #fff9e9;
+  background: #0005;
+}
+
+.reward-reveal h2 {
+  margin-block: 4px 0;
+  color: #fff9e9;
+  font-size: clamp(25px, 7.3vw, 39px);
+  line-height: 1.15;
+  text-shadow: 0 3px 0 #0008, 0 0 15px var(--reward-fill);
+}
+
+.reward-reveal .hype-kicker {
+  background: var(--reward-glow);
+  color: var(--scene-dark);
+}
+
+.reward-reveal .reward {
+  color: var(--reward-glow);
+}
+
+.modal-inner.reward-reveal .primary {
+  background: linear-gradient(#fff1b0, #ffc450);
+  color: #741c25;
+  border-color: #ffd782;
+  box-shadow: 0 4px 0 #8e441b;
+}
+
+.reward-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: 155px;
+  margin: 8px auto 4px;
+  max-width: 340px;
+  isolation: isolate;
+}
+
+.reward-stage::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -17px 0;
+  opacity: .62;
+  background: repeating-conic-gradient(from 5deg, var(--reward-glow) 0deg 6deg, transparent 8deg 27deg);
+  mask-image: radial-gradient(ellipse, #000 5%, transparent 65%);
+}
+
+.reward-stage::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: auto 11% 12px;
+  height: 30px;
+  border: 2px solid var(--reward-glow);
+  border-radius: 50%;
+  box-shadow: 0 0 19px var(--reward-glow), inset 0 0 15px var(--reward-glow);
+  opacity: 0;
+  animation: reward-shockwave .72s .48s ease-out both;
+}
+
+.reward-hero {
+  display: grid;
+  place-items: center;
+  grid-area: 1 / 1;
+  z-index: 1;
+  transform-origin: center 83%;
+  animation: var(--hero-animation) 1.22s cubic-bezier(.21, .68, .32, 1) both;
+}
+
+.reward-hero .material-icon {
+  --icon-size: 104px;
+  filter: drop-shadow(0 0 11px var(--reward-glow)) drop-shadow(0 8px 7px #120a0c73);
+}
+
+.reward-stage > i {
+  --travel-x: -108px;
+  --travel-y: -35px;
+  --particle-size: 21px;
+  --delay: 0s;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--particle-size);
+  aspect-ratio: 1;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(133deg, #fff 0%, var(--reward-glow) 32%, var(--reward-fill) 82%);
+  animation: var(--particle-animation) 1.06s var(--delay) ease-out both;
+}
+
+.reward-stage > i:nth-of-type(2) { --travel-x: -77px; --travel-y: 34px; --particle-size: 14px; --delay: .14s; }
+.reward-stage > i:nth-of-type(3) { --travel-x: -46px; --travel-y: -55px; --particle-size: 12px; --delay: .06s; }
+.reward-stage > i:nth-of-type(4) { --travel-x: 31px; --travel-y: -63px; --particle-size: 14px; --delay: .2s; }
+.reward-stage > i:nth-of-type(5) { --travel-x: 72px; --travel-y: 24px; --particle-size: 24px; --delay: .1s; }
+.reward-stage > i:nth-of-type(6) { --travel-x: 106px; --travel-y: -29px; --particle-size: 17px; --delay: .16s; }
+
+.reward-diamond .reward-stage > i {
+  clip-path: polygon(18% 0, 82% 0, 100% 29%, 50% 100%, 0 29%);
+  background: conic-gradient(from 28deg at 50% 30%, #fff, #99eeff, #276ac0, #64ceff, #fff);
+}
+
+.reward-points .reward-stage > i {
+  border: 2px solid #ffe4a0;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px #ad5419;
+}
+
+.reward-fragment .reward-stage > i {
+  clip-path: polygon(53% 0, 80% 23%, 100% 35%, 73% 65%, 62% 100%, 0 66%, 14% 19%);
+}
+
+.reward-supply .reward-stage > i {
+  border-radius: 2px;
+  background: repeating-linear-gradient(90deg, #ffd787 0 4px, #e98c32 4px 8px);
+  box-shadow: 0 2px 0 #6f350e;
+}
+
+@keyframes reward-diamond-drop {
+  0% { opacity: 0; transform: translateY(-130px) rotate(-33deg) scale(.65); }
+  25% { opacity: 1; }
+  43% { transform: translateY(19px) rotate(11deg) scale(1.15, .85); }
+  63% { transform: translateY(-12px) rotate(-5deg) scale(.98, 1.07); }
+  82%, 100% { transform: none; }
+}
+
+@keyframes reward-diamond-rain {
+  0% { transform: translate(var(--travel-x), -141px) rotate(-36deg) scale(.72); }
+  20%, 58% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--travel-x), 86px) rotate(96deg) scale(1.15); }
+}
+
+@keyframes reward-points-roll {
+  0% { opacity: 0; transform: translateX(-145px) rotate(-220deg) scale(.3); }
+  34% { opacity: 1; transform: translateX(22px) rotate(23deg) scale(1.13); }
+  58% { transform: translateX(-9px) rotate(-10deg) scale(.97); }
+  79%, 100% { transform: none; }
+}
+
+@keyframes reward-point-shower {
+  0% { transform: translate(-50%, 36px) rotateY(80deg) scale(.4); }
+  18%, 69% { opacity: 1; }
+  47% { transform: translate(var(--travel-x), var(--travel-y)) rotateY(340deg) scale(1.1); }
+  100% { opacity: 0; transform: translate(var(--travel-x), 88px) rotateY(800deg) scale(.8); }
+}
+
+@keyframes reward-fragment-merge {
+  0%, 33% { opacity: 0; transform: rotate(-35deg) scale(.2); }
+  61% { opacity: 1; transform: rotate(9deg) scale(1.27); }
+  80%, 100% { opacity: 1; transform: none; }
+}
+
+@keyframes reward-shard-converge {
+  0% { transform: translate(var(--travel-x), var(--travel-y)) rotate(92deg) scale(.2); }
+  25%, 64% { opacity: 1; }
+  76% { opacity: .82; transform: translate(-50%, -50%) rotate(210deg) scale(.6); }
+  100% { opacity: 0; transform: translate(-50%, -50%) rotate(250deg) scale(.2); }
+}
+
+@keyframes reward-supply-land {
+  0% { opacity: 0; transform: translateY(-110px) rotate(17deg) scale(.68); }
+  29% { opacity: 1; }
+  47% { transform: translateY(22px) rotate(-5deg) scale(1.2, .77); }
+  58% { transform: translateX(7px) rotate(4deg); }
+  68% { transform: translateX(-4px) rotate(-2deg); }
+  80%, 100% { transform: none; }
+}
+
+@keyframes reward-crate-burst {
+  0%, 35% { opacity: 0; transform: translate(-50%, 31px) scale(.3); }
+  61% { opacity: 1; transform: translate(var(--travel-x), var(--travel-y)) rotate(53deg); }
+  100% { opacity: 0; transform: translate(var(--travel-x), 70px) rotate(120deg) scale(.75); }
+}
+
+@keyframes reward-shockwave {
+  0% { opacity: .9; transform: scale(.16); }
+  100% { opacity: 0; transform: scale(1.2); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reward-hero,
+  .reward-stage::after,
+  .reward-stage > i { animation: none; }
+}
