@@ -209,7 +209,7 @@ modal.addEventListener("close", () => {
 function showWelcome() {
   showDialog(
     burst + '<div class="welcome-art">' + materialIcon(prizes[3]) + materialIcon(prizes[2]) + materialIcon(prizes[4]) + '</div>'
-    + '<h2 id="modal-title" class="welcome-words"><span class="welcome-line">恭喜你！</span><span class="welcome-line">获得了砍一分的机会！</span><span class="welcome-line welcome-prize">助力蓉城拿冠军！</span></h2>'
+    + '<h2 id="modal-title">领取你的冠军助力机会</h2>'
     + '<p>离冠军只差 <strong>1 分</strong>。你的第一刀已到账！</p>'
     + resultButton("claim-chance", "收下机会，马上去砍"),
     "hype campaign welcome-campaign",
@@ -558,4 +558,15 @@ friendPacket.addEventListener("click", () => showInvite(false, true));
 assist.addEventListener("click", showDalianAssist);
 reset.addEventListener("click", restart);
 render();
-showWelcome();
+const opening = byId("opening-sequence");
+function finishOpening() {
+  if (!opening.isConnected) return;
+  opening.remove();
+  showWelcome();
+}
+if (reduceMotion.matches) {
+  finishOpening();
+} else {
+  opening.lastElementChild.addEventListener("animationend", finishOpening, { once: true });
+  window.setTimeout(finishOpening, 3200);
+}

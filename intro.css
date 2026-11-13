@@ -1,60 +1,49 @@
-.welcome-campaign .welcome-words {
+.opening-sequence {
+  position: fixed;
+  z-index: 10;
+  inset: 60px 0 0;
   display: grid;
-  justify-items: center;
-  gap: 5px;
-  margin: 0 0 12px;
-  padding: 0 2px;
-  letter-spacing: -.045em;
-  line-height: 1.17;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  background: radial-gradient(ellipse at center, #f55428, #c31726 56%, #770c1c);
+  color: #fff1ac;
+  text-align: center;
 }
 
-.welcome-words > .welcome-line {
-  display: block;
-  color: #fff8e5;
-  font-size: clamp(22px, 6.5vw, 32px);
+.opening-sequence::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: repeating-conic-gradient(from 8deg at 50% 50%, #ffe58a35 0deg 9deg, transparent 9deg 24deg);
+}
+
+.opening-sequence span {
+  grid-area: 1 / 1;
+  max-width: min(86vw, 900px);
+  font-size: clamp(40px, 10vw, 104px);
   font-weight: 950;
+  line-height: 1.12;
   text-wrap: balance;
-  text-shadow: 0 3px 0 #a31824, 0 5px 12px #7b11277a;
-  animation: welcome-word-slam .57s .13s cubic-bezier(.18, .85, .3, 1.05) both;
+  text-shadow: 0 5px 0 #84121c, 0 0 24px #ffb64291;
+  animation: opening-slam 1s both;
 }
 
-.welcome-words > .welcome-line:first-child {
-  color: #fff0a7;
-  font-size: clamp(42px, 13vw, 65px);
-  line-height: 1.04;
-  text-shadow: 0 4px 0 #a62927, 0 7px 0 #a6292770, 0 0 20px #ffbf67a6;
+.opening-sequence span:first-child { font-size: clamp(65px, 18vw, 150px); }
+.opening-sequence span:nth-child(2) { animation-delay: 1s; color: #fff9df; }
+.opening-sequence span:nth-child(3) { animation-delay: 2s; }
+
+@keyframes opening-slam {
+  0% { opacity: 0; transform: scale(2.05); }
+  14% { opacity: 1; transform: scale(.9); }
+  27% { opacity: 1; transform: scale(1.08); }
+  40%, 82% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(.82); }
 }
 
-.welcome-words > .welcome-line:nth-child(2) { animation-delay: .54s; }
-
-.welcome-words > .welcome-line:nth-child(3) { animation-delay: .95s; }
-
-.welcome-words > .welcome-prize {
-  margin-top: 1px;
-  color: #ffe487;
-  font-size: clamp(28px, 8.5vw, 41px);
-  letter-spacing: -.065em;
-  text-shadow: 0 3px 0 #9f1721, 0 0 17px #ffaf6985;
-}
-
-.welcome-campaign .welcome-words + p {
-  animation: welcome-note-rise .38s 1.33s ease-out both;
-}
-
-@keyframes welcome-word-slam {
-  0% { opacity: 0; transform: translateY(-13px) scale(2.18); }
-  24% { opacity: 1; }
-  43% { transform: translateY(3px) scale(.92); }
-  68% { transform: translateY(-1px) scale(1.12); }
-  100% { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@keyframes welcome-note-rise {
-  from { opacity: 0; transform: translateY(9px); }
-  to { opacity: 1; transform: translateY(0); }
-}
+.welcome-campaign h2 { color: #fff0a7; text-shadow: 0 3px 0 #a62927; }
 
 @media (prefers-reduced-motion: reduce) {
-  .welcome-words > .welcome-line,
-  .welcome-campaign .welcome-words + p { animation: none; }
+  .opening-sequence { display: none; }
 }
