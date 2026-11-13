@@ -11,6 +11,25 @@
 
 * { box-sizing: border-box; }
 body { margin: 0; color: var(--ink); background: #fbeee6; }
+body { --progress-height: 60px; padding-top: var(--progress-height); }
+.champion-progress { position: fixed; z-index: 5; inset: 0 0 auto; height: var(--progress-height); color: #fff4db; background: linear-gradient(106deg, #7c101d, #b71626 63%, #7c101d); border-bottom: 2px solid #ffc468; box-shadow: 0 3px 14px #65151d48; }
+.champion-progress-inner { max-width: 1080px; height: 100%; margin: auto; padding: 8px 33px 8px 28px; }
+.champion-progress-label { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 6px; font-size: 13px; }
+.champion-progress-label strong { font-size: 14px; }
+#champion-progress-status { color: #ffe096; font-weight: 800; }
+.champion-progress-rail { position: relative; height: 11px; border-radius: 99px; background: #530c14; box-shadow: inset 0 0 0 1px #ffdd8b55; }
+.champion-progress-rail span { display: block; width: 100%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, #f66a33, #ffc04e 56%, #fff39e); box-shadow: 0 0 9px #ffb74cbb; transform: scaleX(.83); transform-origin: left; animation: champion-chase 3.1s infinite; }
+.champion-progress-rail b { position: absolute; right: -5px; top: 50%; transform: translateY(-54%); font-size: 19px; }
+@keyframes champion-chase {
+  0%, 100% { transform: scaleX(.83); }
+  68% { transform: scaleX(.965); animation-timing-function: ease-out; }
+  81% { transform: scaleX(.987); }
+  87% { transform: scaleX(.79); }
+  94% { transform: scaleX(.855); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .champion-progress-rail span { animation: none; transform: scaleX(.96); }
+}
 a { color: inherit; text-decoration: none; }
 button { font: inherit; cursor: pointer; }
 button:disabled { cursor: default; }
@@ -50,8 +69,6 @@ h1 em { color: #ffdc71; font-style: normal; }
 .gap-value { display: flex; align-items: baseline; justify-content: center; gap: 5px; color: var(--deep-red); line-height: 1; margin: 2px 0 10px; }
 .gap-value strong { font: 900 61px/.96 Arial, sans-serif; letter-spacing: -.055em; }
 .gap-value span { font-size: 21px; font-weight: 900; }
-.track { height: 9px; border-radius: 20px; overflow: hidden; background: #f6d7bf; }
-.track span { width: 98.1%; height: 100%; display: block; border-radius: inherit; background: linear-gradient(90deg, #ff9d32, #e52328); }
 .track-label { display: flex; justify-content: space-between; gap: 6px; margin-top: 6px; font-size: 12px; color: var(--muted); }
 .track-label b { color: #9f2a23; }
 .turn-label { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 15px 0 5px; color: #a92623; font-size: 12px; font-weight: 800; }
@@ -108,8 +125,8 @@ h1 em { color: #ffdc71; font-style: normal; }
 .reset:disabled { color: #946d63; opacity: .65; }
 footer { text-align: center; padding: 24px 18px; font-size: 11px; color: var(--muted); }
 
-dialog { max-width: min(430px, calc(100% - 28px)); width: 100%; max-height: calc(100% - 28px); overflow: auto; border: 0; border-radius: 23px; color: var(--ink); padding: 0; background: #fff8ec; box-shadow: 0 18px 80px #36050075; }
-dialog::backdrop { background: #34090dba; }
+dialog { inset-block-start: var(--progress-height); max-width: min(430px, calc(100% - 28px)); width: 100%; max-height: calc(100% - var(--progress-height) - 28px); overflow: auto; border: 0; border-radius: 23px; color: var(--ink); padding: 0; background: #fff8ec; box-shadow: 0 18px 80px #36050075; }
+dialog::backdrop { background: linear-gradient(transparent var(--progress-height), #34090dba var(--progress-height)); }
 .modal-inner { padding: 24px 19px 19px; text-align: center; position: relative; }
 .modal-inner h2 { margin: 0 26px 9px; font-size: 24px; line-height: 1.2; }
 .modal-inner p { margin: 8px 0; font-size: 14px; line-height: 1.65; }
@@ -138,6 +155,7 @@ dialog::backdrop { background: #34090dba; }
 .rules-reference { color: #a51e1e; text-decoration: underline; font-size: 12px; }
 
 @media (max-width: 760px) {
+  .champion-progress-inner { padding-inline: 16px 21px; }
   .header-inner { padding: 0 15px; min-height: 49px; }
   .banner { min-height: 185px; gap: 6px; padding: 19px 17px 48px; }
   .banner-copy > p:first-child { font-size: 11px; letter-spacing: .045em; }

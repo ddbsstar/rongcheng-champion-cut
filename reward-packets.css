@@ -1,0 +1,80 @@
+.material-icon.diamond {
+  --packet-light: #65dcff;
+  --packet-dark: #1754b7;
+  --packet-edge: #93edff;
+  --packet-seam: #164ca6;
+  --seal-light: #ebfdff;
+  --seal-dark: #7bd4ff;
+  --seal-ink: #144a99;
+  --seal-label: "◆";
+  --packet-pattern: repeating-linear-gradient(132deg, transparent 0 17%, #daf5ff29 18% 24%, transparent 25% 38%);
+}
+
+.material-icon.points {
+  --packet-light: #ff6045;
+  --packet-dark: #c11832;
+  --packet-edge: #ffb478;
+  --packet-seam: #9e1730;
+  --seal-light: #fff7bb;
+  --seal-dark: #ffc04d;
+  --seal-ink: #8c3219;
+  --seal-label: "分";
+  --packet-pattern: radial-gradient(circle at 50% 90%, #ffd8666b 0 13%, transparent 15% 25%, #ffd86651 27% 34%, transparent 36%);
+}
+
+.material-icon.fragment {
+  --packet-light: #b375fa;
+  --packet-dark: #682397;
+  --packet-edge: #e1affc;
+  --packet-seam: #58217e;
+  --seal-light: #fff1ff;
+  --seal-dark: #dbabfa;
+  --seal-ink: #63248d;
+  --seal-label: "✦";
+  --packet-pattern: repeating-conic-gradient(from 20deg at 50% 100%, #f2ceff24 0deg 20deg, transparent 20deg 46deg);
+}
+
+.material-icon.supply {
+  --packet-light: #ffbd53;
+  --packet-dark: #bf531b;
+  --packet-edge: #ffe29b;
+  --packet-seam: #a4461a;
+  --seal-light: #fff6be;
+  --seal-dark: #ffc756;
+  --seal-ink: #8c3b15;
+  --seal-label: "★";
+  --packet-pattern: repeating-linear-gradient(90deg, transparent 0 28%, #ffe5a76b 29% 39%, transparent 40% 59%);
+}
+
+.material-icon:is(.diamond, .points, .fragment, .supply)::before {
+  content: "";
+  inset: 1% 11% 3%;
+  border: 1px solid var(--packet-edge);
+  border-radius: calc(var(--icon-size) * .15);
+  clip-path: none;
+  background:
+    linear-gradient(31deg, transparent 48%, var(--packet-seam) 50% 53%, var(--packet-light) 55%) left top / 50% 45% no-repeat,
+    linear-gradient(-31deg, transparent 48%, var(--packet-seam) 50% 53%, var(--packet-light) 55%) right top / 50% 45% no-repeat,
+    var(--packet-pattern),
+    linear-gradient(152deg, var(--packet-light), var(--packet-dark) 70%);
+  box-shadow: inset 0 -3px #44113432, 0 2px 0 #49113941;
+}
+
+.material-icon:is(.diamond, .points, .fragment, .supply)::after {
+  content: var(--seal-label);
+  inset: 27% 29% auto;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--seal-light);
+  border-radius: 50%;
+  clip-path: none;
+  color: var(--seal-ink);
+  background: linear-gradient(150deg, var(--seal-light), var(--seal-dark) 88%);
+  box-shadow: 0 2px 0 #40122b50;
+  font-size: calc(var(--icon-size) * .27);
+  font-weight: 900;
+  line-height: 1;
+  text-shadow: none;
+}
+.prize .material-icon { --icon-size: 23px; }

@@ -9,9 +9,17 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="effects.css">
   <link rel="stylesheet" href="campaign.css">
+  <link rel="stylesheet" href="intro.css">
+  <link rel="stylesheet" href="reward-packets.css">
   <script src="game.js" defer></script>
 </head>
 <body>
+  <aside class="champion-progress" aria-label="夺冠助力进度">
+    <div class="champion-progress-inner">
+      <div class="champion-progress-label"><strong>夺冠助力进度</strong><span id="champion-progress-status">离冠军还差 <b>1</b> 分</span></div>
+      <div class="champion-progress-rail" aria-hidden="true"><span></span><b>🏆</b></div>
+    </div>
+  </aside>
   <header class="site-header">
     <div class="header-inner">
       <a class="brand" href="./"><span class="brand-ball" aria-hidden="true">足</span> 蓉城夺冠</a>
@@ -37,7 +45,6 @@
         <div class="gap-panel">
           <p class="gap-copy" id="gap-copy">距锁定中超冠军还差</p>
           <div class="gap-value"><strong>1</strong><span>分</span></div>
-          <div class="track" aria-label="成都蓉城 52 分，锁定目标 53 分"><span></span></div>
           <div class="track-label"><span><b>52</b> 分 · 成都蓉城</span><span>锁定目标 <b>53</b> 分</span></div>
         </div>
 

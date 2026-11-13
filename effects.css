@@ -130,7 +130,7 @@ button:disabled .guide-hand {
 
 .dalian-reveal .match-score { color: #8e2136; }
 
-dialog:has(.hype)::backdrop { background: #4c0d16c7; }
+dialog:has(.hype)::backdrop { background: linear-gradient(transparent var(--progress-height), #4c0d16c7 var(--progress-height)); }
 
 .hype {
   isolation: isolate;

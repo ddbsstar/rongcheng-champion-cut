@@ -68,7 +68,8 @@ prizes.forEach((prize, index) => {
   const wedge = document.createElement("div");
   wedge.className = "prize";
   wedge.style.setProperty("--angle", index * 60 - 180 + "deg");
-  wedge.innerHTML = "<b>" + prize.icon + "</b><span>" + prize.name + "</span>";
+  const icon = prize.material ? materialIcon(prize) : "<b>" + prize.icon + "</b>";
+  wedge.innerHTML = icon + "<span>" + prize.name + "</span>";
   face.append(wedge);
 });
 
@@ -142,6 +143,7 @@ function render() {
   const dalianKnown = dalianRevealed > roundIndex;
   const complete = phase === "complete";
   byId("gap-copy").textContent = complete ? "赛季收官，锁定目标仍差" : "距锁定中超冠军还差";
+  byId("champion-progress-status").textContent = complete ? "兑奖失败 · 还差 1 分" : "离冠军还差 1 分";
   byId("round-label").textContent = complete ? "赛季收官" : "第 " + match.round + " 轮";
   byId("round-context").textContent = complete ? "四个冠军点全部错过" : "第 " + (roundIndex + 1) + " / 4 次冠军点";
   byId("versus-label").textContent = complete ? "成都蓉城 · 中超亚军" : "成都蓉城 vs " + match.team;
@@ -206,7 +208,7 @@ modal.addEventListener("close", () => {
 function showWelcome() {
   showDialog(
     burst + '<div class="welcome-art">' + materialIcon(prizes[3]) + materialIcon(prizes[2]) + materialIcon(prizes[4]) + '</div>'
-    + '<h2 id="modal-title">恭喜你获得了砍一分助力蓉城冠军的机会！</h2>'
+    + '<h2 id="modal-title" class="welcome-words"><span class="welcome-line">恭喜你！</span><span class="welcome-line">获得了砍一分的机会！</span><span class="welcome-line welcome-prize">助力蓉城拿冠军！</span></h2>'
     + '<p>离冠军只差 <strong>1 分</strong>。你的第一刀已到账！</p>'
     + resultButton("claim-chance", "收下机会，马上去砍"),
     "hype campaign welcome-campaign",
