@@ -74,6 +74,10 @@ h1 em { color: #ffdc71; font-style: normal; }
 .turn-label { display: flex; align-items: center; justify-content: center; gap: 7px; margin: 15px 0 5px; color: #a92623; font-size: 12px; font-weight: 800; }
 .turn-dot { width: 4px; height: 4px; border-radius: 50%; background: #d9533d; }
 .versus-label { margin: 0; font-weight: 850; font-size: 17px; }
+.wheel-matchup { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 8px; margin: 10px auto; padding: 8px 10px; max-width: 340px; border: 1px solid #e9ba83; border-radius: 12px; background: #fff2dc; color: #602019; }
+.wheel-matchup > div { display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 13px; font-weight: 800; line-height: 1.25; }
+.wheel-matchup img { width: 33px; height: 33px; object-fit: contain; flex: none; }
+.wheel-matchup > strong { color: #9e2627; font-size: 12px; }
 
 .wheel-area { position: relative; margin: 15px auto 9px; max-width: 425px; }
 .wheel { position: relative; isolation: isolate; margin: auto; width: min(100%, 285px); aspect-ratio: 1; border-radius: 50%; background: linear-gradient(145deg, #ffea96, #f5a035 48%, #ffcf64 72%, #ef922b); box-shadow: 0 7px 0 #cf6825, 0 11px 19px #a63d2355, inset 0 0 0 2px #ffebac; }

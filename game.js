@@ -221,7 +221,9 @@ function showWheel() {
   const match = matches[roundIndex];
   showDialog(
     burst + '<p class="hype-kicker">第 ' + match.round + ' 轮冠军点</p>'
-    + '<h2 id="modal-title">冠军助力大转盘</h2><p>成都蓉城 vs ' + match.team + '</p>'
+    + '<h2 id="modal-title">冠军助力大转盘</h2>'
+    + '<div class="wheel-matchup"><div>' + crest("chengdu") + '<span>成都蓉城</span></div>'
+    + '<strong>VS</strong><div>' + crest(match.crest) + '<span>' + match.team + '</span></div></div>'
     + '<div class="campaign-wheel-slot" id="wheel-slot"></div><p id="wheel-status" role="status">点中间「砍一刀」抽本轮助力</p>',
     "hype campaign wheel-campaign",
   );
@@ -326,7 +328,9 @@ function showDalianAssist() {
   const directMatch = isDirectMatch();
   showDialog(
     burst + '<p class="hype-kicker">冠军助力红包</p><h2 id="modal-title">快！助力大连输球！</h2>'
-    + '<p>大连英博 vs ' + match.team + '。大连只要少拿分，蓉城就能夺冠。</p>'
+    + '<div class="wheel-matchup"><div>' + crest("dalian") + '<span>大连英博</span></div>'
+    + '<strong>VS</strong><div>' + crest(match.crest) + '<span>' + match.team + '</span></div></div>'
+    + '<p>大连只要少拿分，蓉城就能夺冠。</p>'
     + '<div class="big-packet"><button id="open-dalian" class="packet-open" type="button" '
     + (unlocked ? 'data-focus aria-label="拆掉分红包，揭晓大连赛果">开' + hand : 'disabled aria-label="红包待解锁">锁')
     + '</button></div>'

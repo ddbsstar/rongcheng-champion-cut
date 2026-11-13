@@ -1,0 +1,34 @@
+/* Keep the warm light lettering on the red packet surface. */
+.envelope,
+.campaign.envelope {
+  color: #fff8e8;
+  background: radial-gradient(ellipse at 50% 10%, #ba2623, #a91524 61%, #881323);
+}
+
+.hype.envelope::before {
+  opacity: .45;
+}
+
+.envelope .envelope-note {
+  color: #fff1d1;
+}
+
+.modal-inner:not(.welcome-campaign) .primary {
+  background: linear-gradient(#c52621, #a61923);
+}
+
+.spin {
+  background: linear-gradient(#b82024, #941525);
+}
+
+.wheel-campaign #wheel-status,
+.modal-inner .share-status,
+.modal-inner .match-round,
+.modal-inner .loot-item small {
+  color: #65413a;
+}
+
+.reset:disabled {
+  color: #6d5550;
+  opacity: 1;
+}
