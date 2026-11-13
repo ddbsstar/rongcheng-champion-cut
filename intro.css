@@ -1,7 +1,7 @@
 .opening-sequence {
   position: fixed;
   z-index: 10;
-  inset: 60px 0 0;
+  inset: 0;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -9,6 +9,7 @@
   background: radial-gradient(ellipse at center, #f55428, #c31726 56%, #770c1c);
   color: #fff1ac;
   text-align: center;
+  grid-template-rows: minmax(0, 1fr) minmax(100px, 23dvh) minmax(0, 1fr);
 }
 
 .opening-sequence::before {
@@ -16,23 +17,23 @@
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: repeating-conic-gradient(from 8deg at 50% 50%, #ffe58a35 0deg 9deg, transparent 9deg 24deg);
+  background:
+    url("crests/chengdu.png") center / min(86vw, 72dvh) no-repeat,
+    repeating-conic-gradient(from 8deg at 50% 50%, #ffe58a35 0deg 9deg, transparent 9deg 24deg);
+  opacity: .26;
+  animation: opening-backdrop 3s ease-out both;
 }
 
 .opening-crest {
   grid-area: 1 / 1;
   align-self: end;
-  width: clamp(70px, 19vw, 104px);
+  width: clamp(82px, 25vw, 142px);
   height: auto;
   aspect-ratio: 1;
   object-fit: contain;
   margin-bottom: clamp(8px, 2vh, 20px);
   filter: drop-shadow(0 4px 9px #68121c) drop-shadow(0 0 12px #ffda83);
   animation: opening-crest-arrive .48s ease-out both;
-}
-
-.opening-sequence {
-  grid-template-rows: minmax(0, 1fr) minmax(100px, 23vh) minmax(0, 1fr);
 }
 
 .opening-sequence span {
@@ -51,9 +52,14 @@
 .opening-sequence span:nth-of-type(3) { animation-delay: 2s; }
 
 @keyframes opening-crest-arrive {
-  0% { opacity: 0; transform: translateY(-20px) scale(.65); }
+  0% { opacity: 0; transform: translateY(18dvh) scale(3.2); }
   70% { opacity: 1; transform: scale(1.08); }
   100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes opening-backdrop {
+  from { opacity: .5; transform: scale(1.45); }
+  to { opacity: .26; transform: scale(1); }
 }
 
 @keyframes opening-slam {
